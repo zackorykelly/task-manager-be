@@ -39,28 +39,41 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const config_1 = __importDefault(require("./db/config"));
 const task_1 = __importStar(require("./models/task"));
+const body_parser_1 = __importDefault(require("body-parser"));
 config_1.default.addModels([task_1.default]);
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+app.use(body_parser_1.default.json());
+app.use(body_parser_1.default.urlencoded({ extended: true }));
 const port = process.env.PORT;
 (0, task_1.TaskInit)(config_1.default);
 //Retrieve the list of tasks
 app.get('/tasks', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield task_1.default.findAll();
-    res.send('GET Express + TypeScript Server weee');
+    res.send(result);
 }));
 //Create a new task
-app.post('/tasks', (req, res) => {
-    res.send('POST Express + TypeScript Server weee');
-});
+app.post('/tasks', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newTask = req.body;
+    const result = yield task_1.default.create(newTask);
+    res.send(result);
+}));
 //Update the status of a task (completed or incomplete)
-app.patch('/tasks/:id', (req, res) => {
-    res.send('PATCH Express + TypeScript Server weee');
-});
+app.patch('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield task_1.default.update({ title: 'yoyo' }, { where: {
+            id: req.params.id
+        } });
+    res.sendStatus(200);
+}));
 //Delete a task
-app.delete('/tasks/:id', (req, res) => {
-    res.send('DELETE Express + TypeScript Server weee');
-});
+app.delete('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield task_1.default.destroy({
+        where: {
+            id: req.params.id
+        }
+    });
+    res.sendStatus(200);
+}));
 // connection
 // .sync()
 // .then(() => {

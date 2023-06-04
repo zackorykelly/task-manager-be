@@ -21,16 +21,15 @@ const TaskInit = (sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        name: {
+        title: {
             type: sequelize_typescript_1.DataType.STRING(255)
         },
-        birthdate: {
-            type: sequelize_typescript_1.DataType.DATE,
-            allowNull: true
+        description: {
+            type: sequelize_typescript_1.DataType.STRING(255)
         },
-        country: {
-            type: sequelize_typescript_1.DataType.STRING(100),
-            allowNull: true
+        completed: {
+            type: sequelize_typescript_1.DataType.BOOLEAN,
+            defaultValue: false,
         }
     }, {
         sequelize,
