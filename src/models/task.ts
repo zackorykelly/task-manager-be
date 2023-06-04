@@ -3,9 +3,9 @@ import { Model, Sequelize, DataType, Table } from 'sequelize-typescript';
 @Table
 export default class Task extends Model {
   public id?: number;
-  public name!: string;
-  public birthdate?: Date;
-  public country?: string;
+  public title!: string;
+  public description!: string;
+  public completed?: boolean;
 }
 export const TaskInit = (sequelize: Sequelize) => {
   Task.init({
@@ -14,16 +14,15 @@ export const TaskInit = (sequelize: Sequelize) => {
       autoIncrement: true,
       primaryKey: true
     },
-    name: {
+    title: {
       type: DataType.STRING(255)
     },
-    birthdate: {
-      type: DataType.DATE,
-      allowNull: true
+    description: {
+      type: DataType.STRING(255)
     },
-    country: {
-      type: DataType.STRING(100),
-      allowNull: true
+    completed: {
+      type: DataType.BOOLEAN,
+      defaultValue: false,
     }
   }, {
     sequelize,
