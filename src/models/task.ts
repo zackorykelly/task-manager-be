@@ -1,5 +1,6 @@
 import { Model, Sequelize, DataType, Table } from 'sequelize-typescript';
 
+//Define interface for entity and intiialize in db
 @Table
 export default class Task extends Model {
   public id?: number;
@@ -15,10 +16,10 @@ export const TaskInit = (sequelize: Sequelize) => {
       primaryKey: true
     },
     title: {
-      type: DataType.STRING(255)
+      type: DataType.STRING
     },
     description: {
-      type: DataType.STRING(255)
+      type: DataType.STRING
     },
     completed: {
       type: DataType.BOOLEAN,
@@ -30,5 +31,6 @@ export const TaskInit = (sequelize: Sequelize) => {
     tableName: 'task',
     timestamps: false
   });
+  //Sync will create table if necessary
   Task.sync();
 }

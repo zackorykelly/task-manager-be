@@ -3,12 +3,22 @@ import dotenv from 'dotenv';
 import connection from './db/config';
 import Task, {TaskInit} from './models/task';
 import bodyParser from 'body-parser';
-connection.addModels([Task])
+import cors from 'cors'
+
+//Retrieve port variable from env
 dotenv.config();
+const port = process.env.PORT;
+
+//App initialization
 const app: Express = express();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
-const port = process.env.PORT;
+//Will enable cors on all requests regardless of origin.
+//Should be changed before production release.
+app.use(cors())
+
+//Add an initialize task model(creates table if necessary using sync)
+connection.addModels([Task])
 TaskInit(connection);
 
 
@@ -28,13 +38,14 @@ app.post('/tasks', async (req: Request, res: Response) => {
 
 //Update the status of a task (completed or incomplete)
 app.patch('/tasks/:id', async (req: Request, res: Response) => {
+  const taskUpdate = req.body
   const result = await Task.update(
-    {title: 'yoyo'},
+    taskUpdate,
     {where: {
       id: req.params.id
     }}
   )
-  res.sendStatus(200);
+  res.json("Success");
 });
 
 //Delete a task
@@ -44,18 +55,10 @@ app.delete('/tasks/:id', async (req: Request, res: Response) => {
       id: req.params.id
     }
   });
-  res.sendStatus(200)
+  res.json("Success")
 });
 
-// connection
-// .sync()
-// .then(() => {
-//   console.log("Database connection successful");
-// })
-// .catch((err) => {
-//   console.log("Error: ", err)
-// })
-
+//Run server
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });

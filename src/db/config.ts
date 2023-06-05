@@ -1,12 +1,13 @@
 import { Sequelize } from "sequelize-typescript";
 import Task from "../models/task";
 
+//TODO: use .env to define db variables
 // const connection = new Sequelize({
 //     dialect: "postgres",
 //     host: "localhost",
-//     username: "root",
-//     password: "anku@1234",
-//     database: "todos",
+//     username: "",
+//     password: "",
+//     database: "",
 //     logging: false,
 //     models: [Task],
 // });
