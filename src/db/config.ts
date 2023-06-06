@@ -1,17 +1,14 @@
 import { Sequelize } from "sequelize-typescript";
-import Task from "../models/task";
+import dotenv from 'dotenv'
+dotenv.config()
 
-//TODO: use .env to define db variables
-// const connection = new Sequelize({
-//     dialect: "postgres",
-//     host: "localhost",
-//     username: "",
-//     password: "",
-//     database: "",
-//     logging: false,
-//     models: [Task],
-// });
-
-const connection = new Sequelize('postgres://postgres:1234@localhost:5432/postgres');
+const connection = new Sequelize({
+    dialect: "postgres",
+    host: process.env.PGHOST,
+    port: Number(process.env.PGPORT),
+    username: process.env.PGUSER,
+    password: process.env.PGPASS,
+    database: process.env.PGDB,
+});
 
 export default connection;
