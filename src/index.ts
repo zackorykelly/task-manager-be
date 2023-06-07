@@ -25,7 +25,9 @@ TaskInit(connection);
 
 //Retrieve the list of tasks
 app.get('/tasks', async (req: Request, res: Response) => {
-  const result = await Task.findAll();
+  const result = await Task.findAll({
+    order: [['id', 'ASC']]
+  });
   res.send(result);
 });
 
