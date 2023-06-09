@@ -16,10 +16,12 @@ export const TaskInit = (sequelize: Sequelize) => {
       primaryKey: true
     },
     title: {
-      type: DataType.STRING
+      type: DataType.STRING,
+      allowNull: false,
     },
     description: {
-      type: DataType.STRING
+      type: DataType.STRING,
+      allowNull: false,
     },
     completed: {
       type: DataType.BOOLEAN,

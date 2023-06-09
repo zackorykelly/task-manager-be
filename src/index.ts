@@ -25,39 +25,74 @@ TaskInit(connection);
 
 //Retrieve the list of tasks
 app.get('/tasks', async (req: Request, res: Response) => {
-  const result = await Task.findAll({
-    order: [['id', 'ASC']]
-  });
-  res.send(result);
+  try {    
+    const result = await Task.findAll({
+      order: [['id', 'ASC']]
+    });
+    res.send(result);
+  } catch (error) {
+    //Something went wrong
+    console.error(error);
+    return res.status(500).json({ error: 'Server error.'})
+  }
 });
 
 //Create a new task
 app.post('/tasks', async (req: Request, res: Response) => {
   const newTask = req.body;
-  const result = await Task.create(newTask);
-  res.send(result);
+  try {
+    const result = await Task.create(newTask);
+    res.send(result);
+  } catch (error) {
+    //Something went wrong
+    console.error(error);
+    return res.status(500).json({ error: 'Server error.'})
+  }
 });
 
 //Update the status of a task (completed or incomplete)
 app.patch('/tasks/:id', async (req: Request, res: Response) => {
-  const taskUpdate = req.body
-  const result = await Task.update(
-    taskUpdate,
-    {where: {
-      id: req.params.id
-    }}
-  )
-  res.json("Success");
+  const taskUpdate: Task = req.body
+  try {
+    const response = await Task.update(
+      taskUpdate,
+      {where: {
+        id: req.params.id
+      }}
+    )
+    if (response[0] === 0) {
+      //No tasks found to update
+      res.status(404).json({ error: 'Task not found.'})
+    }
+    //Task was found and updated successfully
+    res.json({message: 'Task updated successfully.'});
+  } catch (error) {
+    //Something went wrong
+    console.error(error);
+    return res.status(500).json({ error: 'Server error.'})
+  }
 });
 
 //Delete a task
 app.delete('/tasks/:id', async (req: Request, res: Response) => {
-  const result = await Task.destroy({
-    where: {
-      id: req.params.id
+  try {
+    const response = await Task.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+    //Response will be the number of rows affected
+    if (response === 0) {
+      //No task found to delete
+      res.status(404).json({ error: 'Task not found.' })
     }
-  });
-  res.json("Success")
+    //Rows were successfully deleted
+    res.json({ message: 'Task successfully deleted.'})
+  } catch (error) {
+    //Something went wrong
+    console.error(error);
+    return res.status(500).json({ error: 'Server error.'})
+  }
 });
 
 //Run server
